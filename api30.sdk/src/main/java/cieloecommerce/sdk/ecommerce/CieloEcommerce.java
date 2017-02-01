@@ -1,15 +1,10 @@
 package cieloecommerce.sdk.ecommerce;
 
-import java.io.IOException;
-
+import cieloecommerce.sdk.Merchant;
+import cieloecommerce.sdk.ecommerce.request.*;
 import org.apache.http.client.HttpClient;
 
-import cieloecommerce.sdk.Merchant;
-import cieloecommerce.sdk.ecommerce.request.CieloRequestException;
-import cieloecommerce.sdk.ecommerce.request.CreateCartTokenRequest;
-import cieloecommerce.sdk.ecommerce.request.CreateSaleRequest;
-import cieloecommerce.sdk.ecommerce.request.QuerySaleRequest;
-import cieloecommerce.sdk.ecommerce.request.UpdateSaleRequest;
+import java.io.IOException;
 
 /**
  * The Cielo Ecommerce SDK front-end;
