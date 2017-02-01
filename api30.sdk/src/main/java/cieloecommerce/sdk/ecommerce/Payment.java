@@ -21,6 +21,8 @@ public class Payment {
 	private Card creditCard;
 	@SerializedName("Debitcard")
 	private Card debitcard;
+	@SerializedName("AuthenticationUrl")
+	private String authenticationUrl;
 	@SerializedName("Tid")
 	private String tid;
 	@SerializedName("ProofOfSale")
@@ -313,6 +315,10 @@ public class Payment {
 	public Payment setTid(String tid) {
 		this.tid = tid;
 		return this;
+	}
+
+	public String getAuthenticationUrl() {
+		return authenticationUrl;
 	}
 
 	public Type getType() {
