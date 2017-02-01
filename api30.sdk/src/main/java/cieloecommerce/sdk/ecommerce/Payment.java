@@ -17,7 +17,7 @@ public class Payment {
 	private boolean recurrent;
 	@SerializedName("RecurrentPayment")
 	private RecurrentPayment recurrentPayment;
-	@SerializedName("Card")
+	@SerializedName("CreditCard")
 	private Card creditCard;
 	@SerializedName("Debitcard")
 	private Card debitcard;
