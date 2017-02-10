@@ -86,6 +86,7 @@ public class Payment {
 	public Card debitCard(String securityCode, String brand) {
 		setType(Type.DebitCard);
 		setDebitcard(new Card(securityCode, brand));
+		setAuthenticate(true);
 
 		return getDebitcard();
 	}
