@@ -9,6 +9,9 @@ public class Card {
 	@SerializedName("Holder")
 	private String holder;
 
+	@SerializedName("CustomerName")
+	private String customerName;
+
 	@SerializedName("ExpirationDate")
 	private String expirationDate;
 
@@ -24,7 +27,16 @@ public class Card {
 	@SerializedName("CardToken")
 	private String cardToken;
 
+	@SerializedName("Links")
+	private Object links;
+
+	public Card()	{
+		// void
+	}
+
 	public Card(String securityCode, String brand) {
+		super();
+
 		setSecurityCode(securityCode);
 		setBrand(brand);
 	}
@@ -89,6 +101,19 @@ public class Card {
 
 	public Card setSecurityCode(String securityCode) {
 		this.securityCode = securityCode;
+		return this;
+	}
+
+	public Object getLinks() {
+		return links;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public Card setCustomerName(String customerName) {
+		this.customerName = customerName;
 		return this;
 	}
 }

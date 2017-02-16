@@ -80,7 +80,7 @@ public class CieloEcommerce {
 	 *      "https://developercielo.github.io/Webservice-3.0/english.html#error-codes">Error
 	 *      Codes</a>
 	 */
-	public CardToken createCardToken(CardToken cardToken) throws IOException, CieloRequestException {
+	public Card createCardToken(Card cardToken) throws IOException, CieloRequestException {
 		CreateCardTokenRequest createCardTokenRequest = new CreateCardTokenRequest(merchant, environment);
 
 		createCardTokenRequest.setHttpClient(httpClient);
@@ -91,11 +91,11 @@ public class CieloEcommerce {
 	}
 
 	/**
-	 * Query a {@link CardToken} on Cielo by card token
+	 * Query a {@link Card} on Cielo by card token
 	 *
 	 * @param cardToken
 	 *            The cardToken to be queried
-	 * @return The {@link CardToken} with tokenized card number, holder name, and expiration date
+	 * @return The {@link Card} with tokenized card number, holder name, and expiration date
 	 * @throws IOException
 	 * @throws CieloRequestException
 	 *             if anything gets wrong.
@@ -103,7 +103,7 @@ public class CieloEcommerce {
 	 *      "https://developercielo.github.io/Webservice-3.0/english.html#error-codes">Error
 	 *      Codes</a>
 	 */
-	public CardToken queryCardToken(String cardToken) throws IOException, CieloRequestException {
+	public Card queryCardToken(String cardToken) throws IOException, CieloRequestException {
 		QueryCardTokenRequest queryCardTokenRequest = new QueryCardTokenRequest(merchant, environment);
 
 		queryCardTokenRequest.setHttpClient(httpClient);
