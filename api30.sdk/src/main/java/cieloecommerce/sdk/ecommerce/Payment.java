@@ -98,6 +98,13 @@ public class Payment {
 		return getCreditCard();
 	}
 
+	public Card creditCard(String cardToken, String securityCode, String brand) {
+		setType(Type.CreditCard);
+		setCreditCard(new Card(cardToken, securityCode, brand));
+
+		return getCreditCard();
+	}
+
 	public RecurrentPayment recurrentPayment(boolean authorizeNow) {
 		setRecurrentPayment(new RecurrentPayment(authorizeNow));
 

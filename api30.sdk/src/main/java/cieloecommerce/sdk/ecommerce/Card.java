@@ -41,6 +41,14 @@ public class Card {
 		setBrand(brand);
 	}
 
+	public Card(String cardToken, String securityCode, String brand) {
+		super();
+
+		setCardToken(cardToken);
+		setSecurityCode(securityCode);
+		setBrand(brand);
+	}
+
 	public String getBrand() {
 		return brand;
 	}
