@@ -1,20 +1,19 @@
 package cieloecommerce.sdk.ecommerce.request;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
+import cieloecommerce.sdk.Environment;
+import cieloecommerce.sdk.Merchant;
+import cieloecommerce.sdk.ecommerce.SaleResponse;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URIBuilder;
 
-import cieloecommerce.sdk.Environment;
-import cieloecommerce.sdk.Merchant;
-import cieloecommerce.sdk.ecommerce.Sale;
+import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Capture or cancel a Sale
  */
-public class UpdateSaleRequest extends AbstractSaleRequest<String, Sale> {
+public class UpdateSaleRequest extends AbstractSaleRequest<String, SaleResponse> {
 	private final String type;
 	private Integer amount;
 	private Integer serviceTaxAmount;
@@ -26,8 +25,8 @@ public class UpdateSaleRequest extends AbstractSaleRequest<String, Sale> {
 	}
 
 	@Override
-	public Sale execute(String paymentId) throws IOException, CieloRequestException {
-		Sale sale = null;
+	public SaleResponse execute(String paymentId) throws IOException, CieloRequestException {
+		SaleResponse sale = null;
 
 		try {
 			URIBuilder builder = new URIBuilder(environment.getApiUrl() + "1/sales/" + paymentId + "/" + type);
@@ -46,7 +45,7 @@ public class UpdateSaleRequest extends AbstractSaleRequest<String, Sale> {
 
 			HttpResponse response = sendRequest(request);
 
-			sale = readResponse(response, Sale.class);
+			sale = readResponse(response, SaleResponse.class);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}

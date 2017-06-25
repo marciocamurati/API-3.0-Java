@@ -153,9 +153,9 @@ public class CieloEcommerceTest {
 
             Assert.assertNotNull(paymentId);
 
-            sale = new CieloEcommerce(merchant, environment).captureSale(paymentId, amount, 0);
+            SaleResponse saleResponse = new CieloEcommerce(merchant, environment).captureSale(paymentId, amount, 0);
 
-            Assert.assertSame(0, sale.getReasonCode());
+            Assert.assertSame(0, saleResponse.getReasonCode());
         } catch (CieloRequestException e) {
             CieloError error = e.getError();
             Assert.fail();
@@ -195,7 +195,7 @@ public class CieloEcommerceTest {
     @Test
     public void testRefund() {
         try {
-            Sale sale = new CieloEcommerce(merchant, environment).cancelSale("XXXXXXXX", amount);
+            SaleResponse sale = new CieloEcommerce(merchant, environment).cancelSale("XXXXXXXX", amount);
 
             Assert.assertSame(0, sale.getReasonCode());
         } catch (CieloRequestException e) {
