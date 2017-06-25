@@ -1,12 +1,8 @@
 package cieloecommerce.sdk.ecommerce.request;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.UUID;
-import java.util.zip.GZIPInputStream;
-
+import cieloecommerce.sdk.Environment;
+import cieloecommerce.sdk.Merchant;
+import com.google.gson.Gson;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -14,9 +10,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-import com.google.gson.Gson;
-import cieloecommerce.sdk.Environment;
-import cieloecommerce.sdk.Merchant;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.UUID;
+import java.util.zip.GZIPInputStream;
 
 /**
  * Abstraction to reuse most of the code that send and receive the HTTP
@@ -112,8 +111,6 @@ public abstract class AbstractSaleRequest<Request, Response> {
 		Response response = null;
 		Gson gson = new Gson();
 
-		System.out.println(responseBody);
-
 		switch (statusCode) {
 		case 200:
 		case 201:
@@ -124,16 +121,12 @@ public abstract class AbstractSaleRequest<Request, Response> {
 			CieloError[] errors = gson.fromJson(responseBody, CieloError[].class);
 
 			for (CieloError error : errors) {
-				System.out.printf("%s: %s", "Cielo Error [" + error.getCode() + "]", error.getMessage());
-
 				exception = new CieloRequestException(error.getMessage(), error, exception);
 			}
 
 			throw exception;
 		case 404:
 			throw new CieloRequestException("Not found", new CieloError(404, "Not found"), null);
-		default:
-			System.out.printf("%s: %s", "Cielo", "Unknown status: " + statusCode);
 		}
 
 		return response;
