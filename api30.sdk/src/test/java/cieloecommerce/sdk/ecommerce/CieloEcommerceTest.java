@@ -129,7 +129,7 @@ public class CieloEcommerceTest {
     public void testWithCreditCard() {
         Sale sale = new Sale("1");
 
-        Customer customer = sale.customer("XXXXXXXX");
+        Customer customer = sale.customer("User name");
 
         Assert.assertNotNull(customer);
 
@@ -137,10 +137,10 @@ public class CieloEcommerceTest {
 
         Assert.assertNotNull(payment);
 
-        payment.creditCard("XXXXXXXX", "XXXXXXXX")
-                .setExpirationDate("XX/XXXX")
-                .setCardNumber("XXXXXXXX")
-                .setHolder("XXXXXXXX");
+        payment.creditCard("192", "Visa")
+                .setExpirationDate("12/2024")
+                .setCardNumber("0000000000000001")
+                .setHolder("User");
 
         payment.setSoftDescriptor("XXXXXXXX");
 
@@ -155,7 +155,7 @@ public class CieloEcommerceTest {
 
             SaleResponse saleResponse = new CieloEcommerce(merchant, environment).captureSale(paymentId, amount, 0);
 
-            Assert.assertSame(0, saleResponse.getReasonCode());
+            Assert.assertEquals("0", saleResponse.getReasonCode());
         } catch (CieloRequestException e) {
             CieloError error = e.getError();
             Assert.fail();
@@ -197,7 +197,7 @@ public class CieloEcommerceTest {
         try {
             SaleResponse sale = new CieloEcommerce(merchant, environment).cancelSale("XXXXXXXX", amount);
 
-            Assert.assertSame(0, sale.getReasonCode());
+            Assert.assertEquals("0", sale.getReasonCode());
         } catch (CieloRequestException e) {
             CieloError error = e.getError();
             Assert.fail();
