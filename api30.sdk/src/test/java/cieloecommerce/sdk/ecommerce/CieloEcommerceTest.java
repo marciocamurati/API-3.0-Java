@@ -22,12 +22,11 @@ public class CieloEcommerceTest {
 
     @Before
     public void setUp() throws Exception {
-//        PROD
-//        merchant = new Merchant("XXXXXXXX", "XXXXXXXX");
-//        environment = Environment.PRODUCTION;
-
-        merchant = new Merchant("XXXXXXXX", "XXXXXXXX");
+        merchant = new Merchant("XXXXXXXXXXX", "XXXXXXXXXXX");
         environment = Environment.SANDBOX;
+
+//        PROD
+//        environment = Environment.PRODUCTION;
     }
 
     /**
@@ -138,6 +137,51 @@ public class CieloEcommerceTest {
         Assert.assertNotNull(payment);
 
         payment.creditCard("192", "Visa")
+                .setExpirationDate("12/2024")
+                .setCardNumber("0000000000000001")
+                .setHolder("User");
+
+        payment.setSoftDescriptor("XXXXXXXX");
+
+        try {
+            sale = new CieloEcommerce(merchant, environment).createSale(sale);
+
+            Assert.assertNotNull(sale);
+
+            String paymentId = sale.getPayment().getPaymentId();
+
+            Assert.assertNotNull(paymentId);
+
+            SaleResponse saleResponse = new CieloEcommerce(merchant, environment).captureSale(paymentId, amount, 0);
+
+            Assert.assertEquals("0", saleResponse.getReasonCode());
+        } catch (CieloRequestException e) {
+            CieloError error = e.getError();
+            Assert.fail();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
+
+    /**
+     * <p>
+     *     Credit card payment with wallet
+     * </p>
+     */
+    @Test
+    public void testWithCreditCardWallet() {
+        Sale sale = new Sale("1");
+
+        Customer customer = sale.customer("User name");
+
+        Assert.assertNotNull(customer);
+
+        Payment payment = sale.payment(amount);
+
+        Assert.assertNotNull(payment);
+
+        payment.creditCard("192", "Visa", new Wallet().MasterPass("103"))
                 .setExpirationDate("12/2024")
                 .setCardNumber("0000000000000001")
                 .setHolder("User");

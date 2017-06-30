@@ -74,6 +74,10 @@ public class Payment {
 	@SerializedName("Address")
 	private String address;
 
+	@SerializedName("Wallet")
+	private Wallet wallet;
+
+
 	public Payment(Integer amount, Integer installments) {
 		setAmount(amount);
 		setInstallments(installments);
@@ -101,6 +105,20 @@ public class Payment {
 	public Card creditCard(String cardToken, String securityCode, String brand) {
 		setType(Type.CreditCard);
 		setCreditCard(new Card(cardToken, securityCode, brand));
+
+		return getCreditCard();
+	}
+
+	public Card creditCard(String brand, Wallet wallet) {
+		this.creditCard(null, brand);
+		setWallet(wallet);
+
+		return getCreditCard();
+	}
+
+	public Card creditCard(String securityCode, String brand, Wallet wallet) {
+		this.creditCard(securityCode, brand);
+		setWallet(wallet);
 
 		return getCreditCard();
 	}
@@ -386,6 +404,14 @@ public class Payment {
 
 	public String getUrl() {
 		return url;
+	}
+
+	public Wallet getWallet() {
+		return wallet;
+	}
+
+	public void setWallet(Wallet wallet) {
+		this.wallet = wallet;
 	}
 
 	public enum Provider {
