@@ -21,14 +21,14 @@ public class Wallet {
     private AdditionalData additionalData;
 
     public Wallet VisaCheckout(String walletKey)    {
-        this.setType(Type.VISACHECKOUT);
+        this.setType(Type.VisaCheckout);
         this.setWalletKey(walletKey);
 
         return this;
     }
 
     public Wallet MasterPass(String captureCode)    {
-        this.setType(Type.MASTERPASS);
+        this.setType(Type.MasterPass);
         this.setAdditionalData(new AdditionalData(captureCode));
 
         return this;
@@ -64,13 +64,7 @@ public class Wallet {
      * </p>
      */
     public enum Type {
-        VISACHECKOUT("VisaCheckout"),
-        MASTERPASS("MasterPass");
-
-        private String value;
-
-        Type(String value)   {
-            this.value = value;
-        }
+        VisaCheckout,
+        MasterPass
     }
 }
