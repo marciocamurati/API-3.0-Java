@@ -4,6 +4,7 @@ local.properties
 .settings/
 .project
 .classpath
+api30.sdk/out/*
 
 # Maven
 
