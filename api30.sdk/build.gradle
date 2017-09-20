@@ -27,6 +27,8 @@ dependencies {
 
     compile "com.google.code.gson:gson:2.6"
 
+    compile "commons-io:commons-io:2.5"
+
     testCompile "junit:junit:4.12"
 
     testCompile "org.mockito:mockito-all:1.10.19"
