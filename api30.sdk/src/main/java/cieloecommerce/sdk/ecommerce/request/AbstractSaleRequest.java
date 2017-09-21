@@ -2,6 +2,7 @@ package cieloecommerce.sdk.ecommerce.request;
 
 import cieloecommerce.sdk.Environment;
 import cieloecommerce.sdk.Merchant;
+import cieloecommerce.sdk.helper.MaskHelper;
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
@@ -21,8 +22,6 @@ import java.io.InputStreamReader;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 
 /**
@@ -33,19 +32,6 @@ public abstract class AbstractSaleRequest<Request, Response> {
 	final Environment environment;
 	private final Merchant merchant;
 	private HttpClient httpClient;
-
-	/*
-	 * RegExp patterns to PCI log informations
-	 */
-	private final Pattern patternCreditCardNumber = Pattern.compile("(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|" +
-			"6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|" +
-			"[68][0-9])[0-9]{11}|(?:2131|1800|35\\d{3})\\d{11})");
-
-	private final Pattern patternSecurityCode = Pattern.compile("\\\"(\\d{3}|\\d{4})\\\"");
-
-	private final Pattern patternValidateDate = Pattern.compile("\\\"\\d{1,2}/\\d{4}\\\"");
-
-	private final Pattern patternMaskedCreditCardNumber = Pattern.compile("\\d{6}\\*+\\d{4}");
 
 	private static final Logger LOG = Logger.getLogger(AbstractSaleRequest.class.getName());
 
@@ -97,7 +83,7 @@ public abstract class AbstractSaleRequest<Request, Response> {
 
 				String responseBody = IOUtils.toString(content, "UTF-8");
 
-				LOG.info(String.format("sendRequest: %s", this.maskSensitiveCardInformations(responseBody)));
+				LOG.info(String.format("sendRequest: %s", MaskHelper.maskSensitiveCardInformations(responseBody)));
 
 				try {
 					content.reset();
@@ -140,72 +126,10 @@ public abstract class AbstractSaleRequest<Request, Response> {
 		}
 
 		if (LOG.isLoggable(Level.INFO))	{
-			LOG.info(String.format("readResponse: %s", this.maskSensitiveCardInformations(responseBuilder.toString())));
+			LOG.info(String.format("readResponse: %s", MaskHelper.maskSensitiveCardInformations(responseBuilder.toString())));
 		}
 
 		return parseResponse(response.getStatusLine().getStatusCode(), responseBuilder.toString(), responseClassOf);
-	}
-
-	/**
-	 * <p>
-	 *     Try to mask the sensitive credit card informations, like CVV, validate date and card number
-	 *     If couldn't return a fixed text message
-	 * </p>
-	 * @param value
-	 * @return
-	 */
-	private String maskSensitiveCardInformations(String value) {
-		Matcher matcher = patternCreditCardNumber.matcher(value);
-
-		if (matcher.find()) {
-			String cardNumber = matcher.group(0);
-
-			StringBuilder maskCardNumber = new StringBuilder();
-
-			maskCardNumber.append(cardNumber.substring(0, 6));
-
-			for (int mask = 0; mask < (cardNumber.length() - 10); mask++) {
-				maskCardNumber.append("*");
-			}
-
-			maskCardNumber.append(cardNumber.substring(cardNumber.length() - 4));
-
-			value = value.replace(cardNumber, maskCardNumber.toString());
-
-			matcher = patternValidateDate.matcher(value);
-
-			if (matcher.find()) {
-				value = matcher.replaceAll("\"*\"");
-			}
-
-			matcher = patternSecurityCode.matcher(value);
-
-			if (matcher.find()) {
-				value =  matcher.replaceAll("\"*\"");
-			}
-
-			return value;
-		}	else	{
-			matcher = patternMaskedCreditCardNumber.matcher(value);
-
-			if (matcher.find()) {
-				matcher = patternValidateDate.matcher(value);
-
-				if (matcher.find()) {
-					value = matcher.replaceAll("\"*\"");
-				}
-
-				matcher = patternSecurityCode.matcher(value);
-
-				if (matcher.find()) {
-					value =  matcher.replaceAll("\"*\"");
-				}
-
-				return value;
-			}
-		}
-
-		return "Find a credit card number but can't mask it!";
 	}
 
 	/**
